@@ -1,10 +1,12 @@
 require("dotenv").config();
 
 const express = require("express");
+const { clerkMiddleware } = require("@clerk/express");
 
 const app = express();
 
 app.use(express.json());
+app.use(clerkMiddleware());
 
 
 const PORT = process.env.PORT || 5000;
