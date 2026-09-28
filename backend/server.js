@@ -1,17 +1,43 @@
 require("dotenv").config();
 
 const express = require("express");
+const cors = require("cors");
+const { clerkMiddleware, getAuth } = require("@clerk/express");
+const folderRoutes = require("./routes/folderRoutes");
 
 const app = express();
 
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+  })
+);
+
 app.use(express.json());
-
-
-const PORT = process.env.PORT || 5000;
+app.use(clerkMiddleware());
 
 app.get("/", (req, res) => {
   res.send("Personal Digital Vault Backend is running");
 });
+
+app.get("/api/auth-test", (req, res) => {
+  const { isAuthenticated, userId } = getAuth(req);
+
+  if (!isAuthenticated) {
+    return res.status(401).json({
+      error: "Unauthorized",
+    });
+  }
+
+  res.json({
+    message: "Authentication successful",
+    userId,
+  });
+});
+
+app.use("/api/folders", folderRoutes);
+
+const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
