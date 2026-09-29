@@ -6,6 +6,7 @@ const { clerkMiddleware, getAuth } = require("@clerk/express");
 
 const folderRoutes = require("./routes/folderRoutes");
 const documentRoutes = require("./routes/documentRoutes");
+const credentialRoutes = require("./routes/credentialRoutes");
 
 const app = express();
 
@@ -28,6 +29,9 @@ app.use("/api/folders", folderRoutes);
 // Document APIs
 app.use("/api/documents", documentRoutes);
 
+// Credential APIs
+app.use("/api/credentials", credentialRoutes);
+
 // Home route
 app.get("/", (req, res) => {
   res.send("Personal Digital Vault Backend is running");
@@ -49,7 +53,6 @@ app.get("/api/auth-test", (req, res) => {
   });
 });
 
-// Start server
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
