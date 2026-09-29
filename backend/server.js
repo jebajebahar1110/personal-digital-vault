@@ -3,23 +3,37 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const { clerkMiddleware, getAuth } = require("@clerk/express");
+
 const folderRoutes = require("./routes/folderRoutes");
+const documentRoutes = require("./routes/documentRoutes");
 
 const app = express();
 
+// Allow frontend to communicate with backend
 app.use(
   cors({
     origin: "http://localhost:5173",
   })
 );
 
+// Read JSON request bodies
 app.use(express.json());
+
+// Clerk authentication middleware
 app.use(clerkMiddleware());
 
+// Folder APIs
+app.use("/api/folders", folderRoutes);
+
+// Document APIs
+app.use("/api/documents", documentRoutes);
+
+// Home route
 app.get("/", (req, res) => {
   res.send("Personal Digital Vault Backend is running");
 });
 
+// Authentication test route
 app.get("/api/auth-test", (req, res) => {
   const { isAuthenticated, userId } = getAuth(req);
 
@@ -35,8 +49,7 @@ app.get("/api/auth-test", (req, res) => {
   });
 });
 
-app.use("/api/folders", folderRoutes);
-
+// Start server
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
