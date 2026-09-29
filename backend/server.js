@@ -7,6 +7,7 @@ const { clerkMiddleware, getAuth } = require("@clerk/express");
 const folderRoutes = require("./routes/folderRoutes");
 const documentRoutes = require("./routes/documentRoutes");
 const credentialRoutes = require("./routes/credentialRoutes");
+const ensureProfile = require("./middleware/profileMiddleware");
 
 const app = express();
 
@@ -22,6 +23,9 @@ app.use(express.json());
 
 // Clerk authentication middleware
 app.use(clerkMiddleware());
+
+// Create/check Supabase profile for authenticated users
+app.use(ensureProfile);
 
 // Folder APIs
 app.use("/api/folders", folderRoutes);
