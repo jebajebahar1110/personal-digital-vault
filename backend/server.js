@@ -8,6 +8,7 @@ const folderRoutes = require("./routes/folderRoutes");
 const documentRoutes = require("./routes/documentRoutes");
 const credentialRoutes = require("./routes/credentialRoutes");
 const ensureProfile = require("./middleware/profileMiddleware");
+const profileRoutes = require("./routes/profileRoutes");
 
 const app = express();
 
@@ -25,6 +26,10 @@ app.use("/api/folders", folderRoutes);
 app.use("/api/documents", documentRoutes);
 app.use("/api/credentials", credentialRoutes);
 
+// Profile APIs
+app.use("/api/profile", profileRoutes);
+
+// Home route
 app.get("/", (req, res) => {
   res.send("Personal Digital Vault Backend is running");
 });
