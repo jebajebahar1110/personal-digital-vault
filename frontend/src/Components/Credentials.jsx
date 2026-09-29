@@ -8,6 +8,7 @@ function Credentials() {
 
   const [credentials, setCredentials] = useState([])
   const [loading, setLoading] = useState(false)
+  const [searchTerm, setSearchTerm] = useState('')
 
   const [title, setTitle] = useState('')
   const [username, setUsername] = useState('')
@@ -174,28 +175,27 @@ function Credentials() {
   }
 
   const handleDeleteCredential = async (id) => {
-  try {
-    setMessage('')
-    setError('')
+    try {
+      setMessage('')
+      setError('')
 
-    await api.delete(`/api/credentials/${id}`)
+      await api.delete(`/api/credentials/${id}`)
 
-    setMessage('Credential deleted successfully.')
+      setMessage('Credential deleted successfully.')
 
-    await fetchCredentials()
-  } catch (err) {
-    console.error(
-      'Failed to delete credential:',
-      err
-    )
+      await fetchCredentials()
+    } catch (err) {
+      console.error(
+        'Failed to delete credential:',
+        err
+      )
 
-    setError(
-      err.response?.data?.error ||
-      'Failed to delete credential.'
-    )
+      setError(
+        err.response?.data?.error ||
+        'Failed to delete credential.'
+      )
+    }
   }
-}
-
 
   const handleHidePassword = (id) => {
     setVisiblePasswords((prev) => {
@@ -206,6 +206,13 @@ function Credentials() {
       return updated
     })
   }
+
+  const filteredCredentials = credentials.filter(
+    (credential) =>
+      credential.title
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase())
+  )
 
   return (
     <DashboardLayout>
@@ -247,13 +254,13 @@ function Credentials() {
         />
 
         <input
-  type="url"
-  placeholder="https://example.com"
-  value={websiteUrl}
-  onChange={(e) =>
-    setWebsiteUrl(e.target.value)
-  }
-/>
+          type="url"
+          placeholder="https://example.com"
+          value={websiteUrl}
+          onChange={(e) =>
+            setWebsiteUrl(e.target.value)
+          }
+        />
 
         <textarea
           placeholder="Notes"
@@ -280,6 +287,15 @@ function Credentials() {
         </p>
       )}
 
+      <input
+        type="text"
+        placeholder="🔍 Search credentials..."
+        value={searchTerm}
+        onChange={(e) =>
+          setSearchTerm(e.target.value)
+        }
+      />
+
       <div className="credential-list">
         {loading ? (
           <p>Loading credentials...</p>
@@ -291,8 +307,16 @@ function Credentials() {
               Add a credential to see it here.
             </p>
           </div>
+        ) : filteredCredentials.length === 0 ? (
+          <div className="credential-item">
+            <h3>No matching credentials</h3>
+
+            <p>
+              No credentials match "{searchTerm}".
+            </p>
+          </div>
         ) : (
-          credentials.map((credential) => (
+          filteredCredentials.map((credential) => (
             <div
               className="credential-item"
               key={credential.id}
@@ -347,13 +371,15 @@ function Credentials() {
               </button>
 
               <button
-  type="button"
-  onClick={() =>
-    handleDeleteCredential(credential.id)
-  }
->
-  Delete
-</button>
+                type="button"
+                onClick={() =>
+                  handleDeleteCredential(
+                    credential.id
+                  )
+                }
+              >
+                Delete
+              </button>
             </div>
           ))
         )}
