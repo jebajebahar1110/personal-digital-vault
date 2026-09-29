@@ -13,6 +13,7 @@ function Documents() {
 
   const [documents, setDocuments] = useState([])
   const [loading, setLoading] = useState(false)
+  const [searchTerm, setSearchTerm] = useState('')
 
   const fetchDocuments = async () => {
     try {
@@ -130,6 +131,12 @@ function Documents() {
     }
   }
 
+  const filteredDocuments = documents.filter((document) =>
+    document.name
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase())
+  )
+
   return (
     <DashboardLayout>
       <h1>Documents</h1>
@@ -180,6 +187,13 @@ function Documents() {
         </div>
       )}
 
+      <input
+        type="text"
+        placeholder="🔍 Search documents..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
+
       <div className="document-list">
         {loading ? (
           <p>Loading documents...</p>
@@ -191,8 +205,16 @@ function Documents() {
               Upload a document to see it here.
             </p>
           </div>
+        ) : filteredDocuments.length === 0 ? (
+          <div className="document-item">
+            <h3>No matching documents</h3>
+
+            <p>
+              No documents match "{searchTerm}".
+            </p>
+          </div>
         ) : (
-          documents.map((document) => (
+          filteredDocuments.map((document) => (
             <div
               className="document-item"
               key={document.id}
