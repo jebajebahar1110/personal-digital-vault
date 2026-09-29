@@ -5,6 +5,15 @@ const supabase = require("../config/supabase");
 const { encrypt, decrypt } = require("../services/encryptionService");
 
 const router = express.Router();
+const isValidUrl = (value) => {
+    try {
+      const url = new URL(value);
+  
+      return url.protocol === "http:" || url.protocol === "https:";
+    } catch {
+      return false;
+    }
+  };
 
 // Get all credentials belonging to the logged-in user
 router.get("/", async (req, res) => {
@@ -59,6 +68,12 @@ router.post("/", async (req, res) => {
       website_url,
       notes,
     } = req.body;
+
+    if (website_url && !isValidUrl(website_url)) {
+        return res.status(400).json({
+          error: "Invalid website URL",
+        });
+      }
 
     if (!title || !username || !password) {
       return res.status(400).json({
@@ -202,6 +217,12 @@ router.put("/:id", async (req, res) => {
       website_url,
       notes,
     } = req.body;
+
+    if (website_url && !isValidUrl(website_url)) {
+        return res.status(400).json({
+          error: "Invalid website URL",
+        });
+      }
 
     if (!title || !username) {
       return res.status(400).json({
