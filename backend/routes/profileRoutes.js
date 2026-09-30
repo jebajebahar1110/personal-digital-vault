@@ -18,7 +18,7 @@ router.get("/", async (req, res) => {
 
     const { data, error } = await supabase
       .from("profiles")
-      .select("id, full_name, email, role, created_at")
+      .select( "id, full_name, email, role, created_at, trial_start_date, trial_end_date, subscription_status")
       .eq("id", userId)
       .single();
 
