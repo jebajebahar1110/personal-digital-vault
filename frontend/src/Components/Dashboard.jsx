@@ -8,21 +8,33 @@ function Dashboard() {
   const { getToken } = useAuth()
 
   const [folderCount, setFolderCount] = useState(0)
+  const [role, setRole] = useState('')
 
-  useEffect(() => {
-    configureAxiosAuth(getToken)
+ useEffect(() => {
+  configureAxiosAuth(getToken)
 
-    const loadFolderCount = async () => {
-      try {
-        const response = await api.get('/api/folders')
-        setFolderCount(response.data.length)
-      } catch (err) {
-        console.error('Failed to load folder count:', err)
-      }
+  const loadFolderCount = async () => {
+    try {
+      const response = await api.get('/api/folders')
+      setFolderCount(response.data.length)
+    } catch (err) {
+      console.error('Failed to load folder count:', err)
     }
+  }
 
-    loadFolderCount()
-  }, [getToken])
+  const loadProfile = async () => {
+    try {
+      const response = await api.get('/api/profile')
+      console.log('Dashboard role:', response.data.role)
+      setRole(response.data.role)
+    } catch (err) {
+      console.error('Failed to load profile:', err)
+    }
+  }
+
+  loadFolderCount()
+  loadProfile()
+}, [getToken])
 
   return (
     <div className="dashboard">
@@ -36,6 +48,10 @@ function Dashboard() {
           <Link to="/dashboard/credentials">Credentials</Link>
           <Link to="/dashboard/profile">Profile</Link>
           <Link to="/dashboard/settings">Settings</Link>
+
+          {(role === 'ADMIN' || role === 'SUPER_ADMIN') && (
+            <Link to="/dashboard/admin">Admin Panel</Link>
+          )}
         </nav>
 
         <div style={{ marginTop: 'auto', textAlign: 'center' }}>
@@ -50,6 +66,10 @@ function Dashboard() {
 
         <p>
           Manage your personal digital information securely.
+        </p>
+
+        <p>
+          Role: {role || 'Loading...'}
         </p>
 
         <div className="dashboard-cards">
