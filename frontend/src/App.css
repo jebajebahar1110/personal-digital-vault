@@ -6,13 +6,17 @@ body {
   margin: 0;
   font-family: Arial, sans-serif;
   background: #f5f7fb;
+  color: #111827;
 }
 
 #root {
   min-height: 100vh;
+  width: 100%;
 }
 
-/* Dashboard */
+/* =========================
+   Dashboard Layout
+========================= */
 
 .dashboard {
   min-height: 100vh;
@@ -20,140 +24,187 @@ body {
   background: #f5f7fb;
 }
 
-/* Sidebar */
+/* =========================
+   Sidebar
+========================= */
 
 .sidebar {
-  width: 240px;
+  width: 250px;
   min-height: 100vh;
-  padding: 24px 18px;
+  padding: 24px 16px;
   background: #111827;
   color: white;
   display: flex;
   flex-direction: column;
+  flex-shrink: 0;
 }
 
 .sidebar h2 {
-  margin: 0 0 35px;
-  font-size: 22px;
+  margin: 0 0 32px;
+  font-size: 21px;
+  font-weight: 700;
   text-align: center;
+  letter-spacing: 0.2px;
 }
 
 .sidebar nav {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .sidebar nav a {
-  padding: 12px 14px;
+  display: block;
+  padding: 11px 14px;
   color: #d1d5db;
   text-decoration: none;
   border-radius: 8px;
+  font-size: 15px;
+  transition: background 0.15s ease, color 0.15s ease;
 }
 
 .sidebar nav a:hover {
   background: #1f2937;
-  color: white;
+  color: #ffffff;
 }
 
 .sidebar button {
   margin-top: auto;
-  padding: 11px;
+  padding: 10px 12px;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   background: #dc2626;
   color: white;
-  font-size: 15px;
+  font-size: 14px;
 }
 
 .sidebar button:hover {
   background: #b91c1c;
 }
 
-/* Main content */
+/* =========================
+   Main Content
+========================= */
 
 .dashboard-main {
   flex: 1;
-  padding: 40px;
+  min-width: 0;
+  padding: 36px 40px;
 }
 
 .dashboard-main h1 {
-  margin: 0 0 10px;
-  font-size: 32px;
+  margin: 0 0 8px;
+  font-size: 30px;
+  line-height: 1.25;
   color: #111827;
 }
 
 .dashboard-main > p {
-  margin-bottom: 30px;
+  margin: 0 0 28px;
   color: #6b7280;
+  font-size: 15px;
 }
 
-/* Dashboard cards */
+/* =========================
+   Dashboard Cards
+========================= */
 
 .dashboard-cards {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 20px;
 }
 
 .dashboard-card {
-  padding: 25px;
-  background: white;
+  padding: 22px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
   border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .dashboard-card h3 {
-  margin: 0 0 15px;
+  margin: 0 0 12px;
   color: #374151;
+  font-size: 16px;
+  font-weight: 600;
 }
 
 .dashboard-card p {
   margin: 0;
-  font-size: 32px;
-  font-weight: bold;
+  font-size: 30px;
+  font-weight: 700;
   color: #111827;
 }
 
-/* Folder form */
+/* =========================
+   Forms
+========================= */
 
 .folder-form {
   display: flex;
   gap: 10px;
   margin-bottom: 25px;
-  max-width: 600px;
+  max-width: 650px;
 }
 
 .folder-form input {
   flex: 1;
-  padding: 12px;
+  min-width: 0;
+  padding: 11px 13px;
   border: 1px solid #d1d5db;
   border-radius: 8px;
   font-size: 15px;
-  background: white;
+  background: #ffffff;
+  color: #111827;
 }
 
 .folder-form input:focus {
-  outline: 2px solid #2563eb;
+  outline: 2px solid rgba(37, 99, 235, 0.2);
   border-color: #2563eb;
 }
 
 .folder-form button {
-  padding: 12px 18px;
+  padding: 11px 18px;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   background: #2563eb;
   color: white;
   font-size: 15px;
+  font-weight: 600;
 }
 
 .folder-form button:hover {
   background: #1d4ed8;
 }
 
-/* Folder list */
+/* =========================
+   Search Inputs
+========================= */
+
+input[type="text"],
+input[type="search"] {
+  padding: 11px 13px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #111827;
+  font-size: 15px;
+  outline: none;
+}
+
+input[type="text"]:focus,
+input[type="search"]:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* =========================
+   Folder List
+========================= */
 
 .folder-list {
   display: flex;
@@ -163,17 +214,18 @@ body {
 }
 
 .folder-item {
-  background: white;
+  background: #ffffff;
   padding: 16px 18px;
+  border: 1px solid #e5e7eb;
   border-radius: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
 }
 
 .folder-item span {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
   color: #374151;
 }
@@ -201,9 +253,77 @@ body {
   border: 1px solid #d1d5db;
   border-radius: 6px;
   font-size: 15px;
+  background: #ffffff;
 }
 
-/* Mobile */
+/* =========================
+   Trial Status Card
+========================= */
+
+.trial-card {
+  margin: 24px 0;
+  padding: 20px 22px;
+  background: #ffffff;
+  border: 1px solid #dbeafe;
+  border-left: 4px solid #2563eb;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.trial-card h3 {
+  margin: 0 0 10px;
+  color: #111827;
+  font-size: 18px;
+}
+
+.trial-card p {
+  margin: 5px 0;
+  color: #4b5563;
+  font-size: 14px;
+}
+
+.trial-card strong {
+  color: #111827;
+}
+
+/* =========================
+   Common States
+========================= */
+
+.loading,
+.error,
+.empty-state {
+  padding: 20px;
+  margin-top: 15px;
+  border-radius: 10px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  color: #6b7280;
+}
+
+.error {
+  color: #b91c1c;
+  border-color: #fecaca;
+  background: #fef2f2;
+}
+
+/* =========================
+   Responsive
+========================= */
+
+@media (max-width: 900px) {
+  .sidebar {
+    width: 220px;
+  }
+
+  .dashboard-main {
+    padding: 30px 25px;
+  }
+
+  .dashboard-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
 
 @media (max-width: 768px) {
   .dashboard {
@@ -213,19 +333,34 @@ body {
   .sidebar {
     width: 100%;
     min-height: auto;
+    padding: 18px 16px;
+  }
+
+  .sidebar h2 {
+    margin-bottom: 18px;
   }
 
   .sidebar nav {
     flex-direction: row;
     flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .sidebar nav a {
+    flex: 1 1 auto;
+    text-align: center;
   }
 
   .sidebar button {
-    margin-top: 20px;
+    margin-top: 18px;
   }
 
   .dashboard-main {
     padding: 25px 20px;
+  }
+
+  .dashboard-main h1 {
+    font-size: 26px;
   }
 
   .dashboard-cards {
@@ -234,11 +369,85 @@ body {
 
   .folder-form {
     flex-direction: column;
+    max-width: 100%;
+  }
+
+  .folder-form button {
+    width: 100%;
   }
 
   .folder-item {
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
+  }
+
+  .folder-item div {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-main {
+    padding: 20px 15px;
+  }
+
+  .sidebar nav a {
+    width: 100%;
+    flex: 1 1 100%;
+  }
+
+  .trial-card {
+    padding: 17px;
+  }
+}
+
+/* =========================
+   Settings
+========================= */
+
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 25px;
+  max-width: 900px;
+}
+
+.settings-card {
+  padding: 22px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.settings-card h3 {
+  margin: 0 0 10px;
+  font-size: 17px;
+  color: #111827;
+}
+
+.settings-card p {
+  margin: 0 0 18px;
+  color: #6b7280;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.settings-card button {
+  padding: 9px 14px;
+  border: none;
+  border-radius: 7px;
+  background: #e5e7eb;
+  color: #6b7280;
+  font-size: 13px;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .settings-grid {
+    grid-template-columns: 1fr;
   }
 }

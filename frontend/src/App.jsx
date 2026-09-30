@@ -2,6 +2,9 @@ import { SignIn, SignUp, useAuth } from '@clerk/react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 
 import Dashboard from './Components/Dashboard'
+import ManagerDashboard from './Components/ManagerDashboard'
+import AdminDashboard from './Components/AdminDashboard'
+import SuperAdminDashboard from './Components/SuperAdminDashboard'
 import Documents from './Components/Documents'
 import Folders from './Components/Folders'
 import Credentials from './Components/Credentials'
@@ -51,6 +54,21 @@ function App() {
       <Route
         path="/dashboard"
         element={<Dashboard />}
+      />
+
+      <Route
+        path="/dashboard/manager"
+        element={<ManagerDashboard />}
+      />
+
+      <Route
+        path="/dashboard/admin"
+        element={<AdminDashboard />}
+      />
+
+      <Route
+        path="/dashboard/super-admin"
+        element={<SuperAdminDashboard />}
       />
 
       <Route
