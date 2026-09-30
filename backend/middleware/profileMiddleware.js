@@ -58,7 +58,7 @@ const ensureProfile = async (req, res, next) => {
           .from("profiles")
           .update(updateData)
           .eq("id", userId)
-          .select("id, full_name, email, role")
+          .select("id, full_name, email, role, trial_start_date, trial_end_date, subscription_status")
           .single();
 
         if (updateError) {
