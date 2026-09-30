@@ -7,8 +7,10 @@ const { clerkMiddleware, getAuth } = require("@clerk/express");
 const folderRoutes = require("./routes/folderRoutes");
 const documentRoutes = require("./routes/documentRoutes");
 const credentialRoutes = require("./routes/credentialRoutes");
-const ensureProfile = require("./middleware/profileMiddleware");
 const profileRoutes = require("./routes/profileRoutes");
+
+const ensureProfile = require("./middleware/profileMiddleware");
+const { requireRole } = require("./middleware/roleMiddleware");
 
 const app = express();
 
@@ -37,8 +39,20 @@ app.use("/api/documents", documentRoutes);
 // Credential APIs
 app.use("/api/credentials", credentialRoutes);
 
-//Profile APIs
+// Profile APIs
 app.use("/api/profile", profileRoutes);
+
+// Admin test route
+app.get(
+  "/api/admin-test",
+  requireRole("ADMIN", "SUPER_ADMIN"),
+  (req, res) => {
+    res.json({
+      message: "Admin access granted",
+      role: req.userRole,
+    });
+  }
+);
 
 // Home route
 app.get("/", (req, res) => {
