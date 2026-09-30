@@ -11,7 +11,6 @@ const ensureProfile = async (req, res, next) => {
       });
     }
 
-    // Get user details from Clerk
     const clerkUser = await clerkClient.users.getUser(userId);
 
     const fullName = [clerkUser.firstName, clerkUser.lastName]
@@ -23,47 +22,62 @@ const ensureProfile = async (req, res, next) => {
         (email) => email.id === clerkUser.primaryEmailAddressId
       )?.emailAddress || null;
 
-    // Check whether the user already has a profile
     const { data: existingProfile, error: findError } = await supabase
       .from("profiles")
-      .select("id, full_name, email, role")
+      .select(
+        "id, full_name, email, role, trial_start_date, trial_end_date, subscription_status"
+      )
       .eq("id", userId)
       .maybeSingle();
 
     if (findError) {
       console.error(findError);
-
       return res.status(500).json({
         error: "Failed to check user profile",
       });
     }
 
-    // Profile already exists
+    // Existing profile
     if (existingProfile) {
       const updateData = {};
 
-      // Add Clerk full name if it is missing in Supabase
       if (!existingProfile.full_name && fullName) {
         updateData.full_name = fullName;
       }
 
-      // Add Clerk email if it is missing in Supabase
       if (!existingProfile.email && email) {
         updateData.email = email;
       }
 
-      // Update profile only when there is missing information
+      // Initialize trial dates if this is a TRIAL user
+      // but trial dates are missing.
+      if (
+        existingProfile.subscription_status === "TRIAL" &&
+        (!existingProfile.trial_start_date ||
+          !existingProfile.trial_end_date)
+      ) {
+        const trialStartDate = new Date();
+        const trialEndDate = new Date();
+
+        trialEndDate.setDate(trialEndDate.getDate() + 7);
+
+        updateData.trial_start_date = trialStartDate.toISOString();
+        updateData.trial_end_date = trialEndDate.toISOString();
+        updateData.subscription_status = "TRIAL";
+      }
+
       if (Object.keys(updateData).length > 0) {
         const { data: updatedProfile, error: updateError } = await supabase
           .from("profiles")
           .update(updateData)
           .eq("id", userId)
-          .select("id, full_name, email, role, trial_start_date, trial_end_date, subscription_status")
+          .select(
+            "id, full_name, email, role, trial_start_date, trial_end_date, subscription_status"
+          )
           .single();
 
         if (updateError) {
           console.error(updateError);
-
           return res.status(500).json({
             error: "Failed to update user profile",
           });
@@ -77,7 +91,12 @@ const ensureProfile = async (req, res, next) => {
       return next();
     }
 
-    // Create a profile for a new authenticated Clerk user
+    // New profile → automatically create 7-day trial
+    const trialStartDate = new Date();
+    const trialEndDate = new Date();
+
+    trialEndDate.setDate(trialEndDate.getDate() + 7);
+
     const { data: newProfile, error: createError } = await supabase
       .from("profiles")
       .insert([
@@ -86,14 +105,18 @@ const ensureProfile = async (req, res, next) => {
           full_name: fullName || null,
           email: email || null,
           role: "USER",
+          trial_start_date: trialStartDate.toISOString(),
+          trial_end_date: trialEndDate.toISOString(),
+          subscription_status: "TRIAL",
         },
       ])
-      .select("id, full_name, email, role")
+      .select(
+        "id, full_name, email, role, trial_start_date, trial_end_date, subscription_status"
+      )
       .single();
 
     if (createError) {
       console.error(createError);
-
       return res.status(500).json({
         error: "Failed to create user profile",
       });
