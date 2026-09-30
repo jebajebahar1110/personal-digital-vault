@@ -14,16 +14,25 @@ const { requireRole } = require("./middleware/roleMiddleware");
 
 const app = express();
 
+<<<<<<< HEAD
 // Allow frontend to communicate with backend
+=======
+>>>>>>> feature/frontend-setup
 app.use(
   cors({
     origin: "http://localhost:5173",
   })
 );
 
+<<<<<<< HEAD
 // Read JSON request bodies
+=======
+>>>>>>> feature/frontend-setup
 app.use(express.json());
+app.use(clerkMiddleware());
+app.use(ensureProfile);
 
+<<<<<<< HEAD
 // Clerk authentication middleware
 app.use(clerkMiddleware());
 
@@ -42,6 +51,15 @@ app.use("/api/credentials", credentialRoutes);
 // Profile APIs
 app.use("/api/profile", profileRoutes);
 
+=======
+app.use("/api/folders", folderRoutes);
+app.use("/api/documents", documentRoutes);
+app.use("/api/credentials", credentialRoutes);
+
+// Profile APIs
+app.use("/api/profile", profileRoutes);
+
+>>>>>>> feature/frontend-setup
 // Admin test route
 app.get(
   "/api/admin-test",
@@ -59,7 +77,10 @@ app.get("/", (req, res) => {
   res.send("Personal Digital Vault Backend is running");
 });
 
+<<<<<<< HEAD
 // Authentication test route
+=======
+>>>>>>> feature/frontend-setup
 app.get("/api/auth-test", (req, res) => {
   const { isAuthenticated, userId } = getAuth(req);
 
